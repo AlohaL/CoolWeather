@@ -6,7 +6,7 @@ import org.litepal.crud.DataSupport;
  * Created by Aloha on 2017/7/22.
  */
 
-public class Country extends DataSupport {
+public class County extends DataSupport {
     private int id; //每个实体类都有的字段
     private String countyName; //县名
     private String weatherId; //县所对应的天气的ID
