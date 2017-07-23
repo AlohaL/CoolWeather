@@ -1,3 +1,5 @@
+package com.example.coolweather;
+
 import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.app.ProgressDialog;
@@ -137,8 +139,8 @@ public class ChooseAreaFragment extends Fragment {
     private void queryCities(){
         titleText.setText(selectedProvince.getProvinceName());
         backButton.setVisibility(View.VISIBLE);
-        cityList = DataSupport.where("provinceid=?",String.valueOf(selectedProvince.getId())).find(City.class);
-        if(cityList.size()>0){
+        cityList = DataSupport.where("provinceid = ?",String.valueOf(selectedProvince.getId())).find(City.class);
+        if(cityList.size() > 0){
             dataList.clear();
             for(City city:cityList)
                 dataList.add(city.getCityName());
@@ -158,7 +160,7 @@ public class ChooseAreaFragment extends Fragment {
     private void queryCounties(){
         titleText.setText(selectedCity.getCityName());
         backButton.setVisibility(View.VISIBLE);
-        countyList = DataSupport.where("cityid=?",String.valueOf(selectedCity.getId())).find(County.class);
+        countyList = DataSupport.where("cityid = ?",String.valueOf(selectedCity.getId())).find(County.class);
         if(countyList.size()>0){
             dataList.clear();
             for(County county:countyList)
@@ -168,7 +170,9 @@ public class ChooseAreaFragment extends Fragment {
             currentLevel = LEVEL_COUNTY;
         }else{
             int provinceCode = selectedProvince.getProvinceCode();
+            System.out.println("provinceCode:"+provinceCode);
             int cityCode = selectedCity.getCityCode();
+            System.out.println("cityCode:"+cityCode);
             String address = "http://guolin.tech/api/china/"+provinceCode+"/"+cityCode;
             queryFromServer(address,"county");
         }
@@ -178,6 +182,7 @@ public class ChooseAreaFragment extends Fragment {
      * 根据传入的地址和类型从服务器上查询省市县数据
      */
     private void queryFromServer(String address,final String type){
+        showProgressDialog();
         HttpUtil.sendOkHttpRequest(address, new Callback(){
             @Override
             public void onResponse(Call call, Response response) throws IOException {
